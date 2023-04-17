@@ -41,7 +41,7 @@ class QaBot:
         # 计算question的embedding
         query_embedding = self._encode_text(question)
         # 根据question的embedding，找到最相关的3个chunk
-        relevant_chunks = self._search_index(np.array([query_embedding]), topk=3)
+        relevant_chunks = self._search_index(query_embedding, topk=3)
         # 根据question和最相关的3个chunk，构造prompt
         prompt = self._generate_prompt(question, relevant_chunks)
         # 请求chatglm的api获得答案
@@ -77,7 +77,10 @@ class QaBot:
 
 if __name__ == '__main__':
     import sys
+    # 初始化问答机器人
     qabot = QaBot(doc_path="data/中华人民共和国道路交通安全法.txt", chatglm_api_url=sys.argv[1])
+    # 根据文档回答问题
+    answer, _ = qabot.query('酒后驾驶会坐牢吗')
     questions = [
         "酒后驾驶会坐牢吗",
         "高速上的最高速度是多少？",
